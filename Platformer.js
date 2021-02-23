@@ -17,15 +17,28 @@ ctx.font = "15px Arial";
 //testing
 ctx.fillText('Hello World', 50, 50);
 
+
+
 //character
+var characterImage = './images/imagges.png';
 var characterX = 500;
 var characterY = 500;
 function drawCharacter() {
   ctx.clearRect(0, 0, width, height)
-  ctx.fillRect(characterX, characterY, 50, 50);
+  loadImages(characterImage, 500, 500);
 }
 
+
+
 drawCharacter();
+
+function loadImages(mySrc, x, y, ctxi) {
+  var imageToDraw = new Image();
+  imageToDraw.onload = function() {
+    ctxi.drawImage(imageToDraw, x, y);
+  }
+  imageToDraw.src = mySrc;
+}
 
 var aDown = false;
 var dDown = false;
@@ -56,15 +69,15 @@ function keyUp(event) {
 
 function whileDown() {
   if (aDown == true && characterX > 0) {
-    characterX -= 1;
+    characterX -= 2;
   }
   if (dDown == true && characterX < width - 50) {
-    characterX += 1;
+    characterX += 2;
   }
   drawCharacter();
 }
 
-setInterval(whileDown, 5);
+setInterval(whileDown, 1);
 
 document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);
