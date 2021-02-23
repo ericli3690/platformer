@@ -9,6 +9,6 @@ body {
 #game {
   /*border: 3px solid grey;*/
   margin: 0px;
-  overflow: hidden;
-  display: block;
+  overflow: hidden; /* removing scroll bars*/
+  display: block; /*preventing things outside the canvas i think*/
 }

@@ -14,35 +14,35 @@ game.height = height;
 ctx.fillStyle = 'black';
 ctx.font = "15px Arial";
 
-//testing
-ctx.fillText('Hello World', 50, 50);
-
-
+//when loading images
+function loadImages(mySrc, x, y, ctxi, firstTimeLoading) {
+  var imageToDraw = new Image();
+  imageToDraw.src = mySrc;
+  if (firstTimeLoading == true) {
+    imageToDraw.onload = function() {
+      ctxi.drawImage(imageToDraw, x, y);
+    }
+  } else {
+    ctxi.drawImage(imageToDraw, x, y);
+  }
+}
 
 //character
+//looks, position variables
 var characterImage = './images/imagges.png';
 var characterX = 0;
 var characterY = 0;
-function drawCharacter() {
+//drawing the character
+function drawCharacter(first) {
   ctx.clearRect(0, 0, width, height)
-  loadImages(characterImage, characterX, characterY, ctx);
+  loadImages(characterImage, characterX, characterY, ctx, first);
 }
+//first time drawing the character
+drawCharacter(true);
 
-
-
-drawCharacter();
-
-function loadImages(mySrc, x, y, ctxi) {
-  var imageToDraw = new Image();
-  imageToDraw.onload = function() {
-    ctxi.drawImage(imageToDraw, x, y);
-  }
-  imageToDraw.src = mySrc;
-}
-
+//keydown variables
 var aDown = false;
 var dDown = false;
-
 
 //keydown
 function keyDown(event) {
@@ -68,13 +68,15 @@ function keyUp(event) {
 }
 
 function whileDown() {
-  if (aDown == true && characterX > 0) {
-    characterX -= 2;
+  if ((aDown || dDown) == true) {
+    if (aDown == true && characterX > 0) {
+      characterX -= 2;
+    }
+    if (dDown == true && characterX < width - 50) {
+      characterX += 2;
+    }
+    drawCharacter(false);
   }
-  if (dDown == true && characterX < width - 50) {
-    characterX += 2;
-  }
-  drawCharacter();
 }
 
 setInterval(whileDown, 1);
