@@ -21,11 +21,11 @@ ctx.fillText('Hello World', 50, 50);
 
 //character
 var characterImage = './images/imagges.png';
-var characterX = 500;
-var characterY = 500;
+var characterX = 0;
+var characterY = 0;
 function drawCharacter() {
   ctx.clearRect(0, 0, width, height)
-  loadImages(characterImage, 500, 500);
+  loadImages(characterImage, characterX, characterY, ctx);
 }
 
 
