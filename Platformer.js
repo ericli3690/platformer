@@ -1,17 +1,11 @@
-console.log('Platformer');
-
-//defining the canvas and the pen
-var game = document.getElementById('game');
-var ctx = game.getContext('2d');
+console.log('JS Linked');
 
 //making the game fit the window
 var width = window.innerWidth;
 var height = window.innerHeight;
-game.width = width;
-game.height = height;
 
 //when loading images
-function loadImages(mySrc, x, y, ctxi, firstTimeLoading) {
+function loadImage(mySrc, x, y, ctxi, firstTimeLoading) {
   var imageToDraw = new Image();
   imageToDraw.src = mySrc;
   if (firstTimeLoading == true) {
@@ -23,19 +17,52 @@ function loadImages(mySrc, x, y, ctxi, firstTimeLoading) {
   }
 }
 
+class Player {
+  constructor(x, y, sprite) {
+    this.x = x;
+    this.y = y;
+    this.sprite = characterImages[sprite];
+  }
+  get pos() {
+    return this.x + ' ' + this.y;
+  }
+  newPos() {
 
-//character
-//looks, position variables
-var characterImage = './images/imagges.png';
-var characterX = 50;
-var characterY = 250;
-//drawing the character
-function drawCharacter(first) {
-  ctx.clearRect(0, 0, width, height)
-  loadImages(characterImage, characterX, characterY, ctx, first);
+  }
+  draw(target, first) {
+    loadImage(sprite, x, y, target.ctx, first);
+  }
 }
+
+class Canvas {
+  constructor(identity) {
+    this.identity = identity;
+  }
+  ready() {
+    this.ctx = identity.getContext('2d');
+    this.identity.width = width;
+    this.identity.height = height;
+    this.interval = setInterval(this.update(), 20);
+  }
+  clear() {
+    this.ctx.clearRect(0, 0, width, height);
+  }
+  update() {
+    this.clear();
+    player.newPos();
+    player.draw(this.identity, false);
+  }
+}
+
 //first time drawing the character
-drawCharacter(true);
+var characterImages = ['./images/imagges.png'];
+var characterStartingX = 50;
+var characterStartingY = 250;
+
+var player = new Player(characterStartingX, characterStartingY, characterImages[0]);
+var canvas = new Canvas(document.getElementById('game'));
+canvas.ready();
+player.draw(canvas, true);
 
 //keydown variables
 var aDown = false;
@@ -66,13 +93,12 @@ function keyUp(event) {
 //character speed
 function whileDown() {
   if ((aDown || dDown) == true) {
-    if (aDown == true && characterX > 0) {
-      characterX -= 0.5;
+    if (aDown == true && player.x > 0) {
+      player.x -= 0.5;
     }
-    if (dDown == true && characterX < width - 50) {
-      characterX += 1;
+    if (dDown == true && player.x < width - player.sprite.width) {
+      player.x += 1;
     }
-    drawCharacter(false);
   }
 }
 
@@ -128,10 +154,4 @@ function component(width, height, color, x, y, type) {
         this.x += this.speedX;
         this.y += this.speedY + this.gravitySpeed;
     }
-}
-//identifiers again, need to link code with existing canvas
-function updateGameArea() {
-    myGameArea.clear();
-    myGamePiece.newPos();
-    myGamePiece.update();
 }
