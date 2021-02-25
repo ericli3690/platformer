@@ -1,5 +1,9 @@
 html {
   font-family: sans-serif;
+<<<<<<< HEAD
+=======
+  /*background image*/
+>>>>>>> 88d9ce0255ef748b8bdef103e75047f0d238a84a
   background-image: url("./images/brain_background.png");
 }
 
