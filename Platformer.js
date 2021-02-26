@@ -82,7 +82,7 @@ var aDown = false;
 var dDown = false;
 var background = 0;
 var backgrounds = ['./images/brain_background.png', './images/dream_background.png'];
-document.body.style.backgroundImage = 'url(' + backgrounds[background] + ');';
+//////////document.body.style.backgroundImage = 'url(' + backgrounds[background] + ');';
 
 //keydown
 function keyDown(event) {
@@ -101,7 +101,7 @@ function keyDown(event) {
     } else {
       background = 0;
     }
-    document.body.style.backgroundImage = 'url(' + backgrounds[background] + ');';
+    ////////document.body.style.backgroundImage = 'url(' + backgrounds[background] + ');';
   }
 }
 
