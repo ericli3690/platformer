@@ -63,6 +63,7 @@ var characterStartingX = 50;
 var characterStartingY = 235;
 var player;
 var playerCanvas;
+
 //canvases
 function startGame() {
   playerCanvas = new Canvas(document.getElementById('player'));
@@ -74,11 +75,14 @@ function startGame() {
   player.draw(playerCanvas, true);
 }
 
-startGame();
+//startGame();
 
 //keydown variables
 var aDown = false;
 var dDown = false;
+var background = 0;
+var backgrounds = ['./images/brain_background.png', './images/dream_background.png'];
+document.body.style.backgroundImage = 'url(' + backgrounds[background] + ');';
 
 //keydown
 function keyDown(event) {
@@ -91,8 +95,13 @@ function keyDown(event) {
     dDown = true;
   }
   if (event.keyCode == 69) {
-    //e
-    eDown = true;
+    //e, toggle background
+    if (background == 0) {
+      background = 1;
+    } else {
+      background = 0;
+    }
+    document.body.style.backgroundImage = 'url(' + backgrounds[background] + ');';
   }
 }
 
@@ -107,19 +116,16 @@ function keyUp(event) {
   }
 }
 
-//toggle background
-
-
-
 //character speed
 function whileDown() {
-  if ((aDown || dDown || eDown) == true) {
+  if ((aDown || dDown) == true) {
     if (aDown == true && player.x > 0) {
       player.x -= 0.5;
     }
     if (dDown == true && player.x < width - player.sprite.width) {
       player.x += 1;
     }
+  }
 }
 
 setInterval(whileDown, 1);
@@ -129,6 +135,7 @@ document.addEventListener('keyup', keyUp);
 
 
 // all gravity and speed, i think this is good
+/*
 function component(width, height, color, x, y, type) {
     this.type = type;
     this.width = width;
@@ -162,3 +169,4 @@ this.newPos = function() {
       this.y = rockbottom;
     }
   }
+*/

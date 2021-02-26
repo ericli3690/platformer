@@ -1,11 +1,11 @@
 html {
   font-family: sans-serif;
-  background-image: url("./images/dream_background.png");
-  background-image: url("./images/brain_background.png");
   background-repeat: no-repeat;
   background-size: 1368px 920px;
   overflow: hidden; /*removing scroll bars*/
+}
+
 body {
    margin: 0px;
+
  }
-}
