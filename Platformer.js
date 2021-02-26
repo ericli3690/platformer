@@ -90,6 +90,10 @@ function keyDown(event) {
     //d
     dDown = true;
   }
+  if (event.keyCode == 69) {
+    //e
+    eDown = true;
+  }
 }
 
 function keyUp(event) {
@@ -102,16 +106,20 @@ function keyUp(event) {
     dDown = false;
   }
 }
+
+//toggle background
+
+
+
 //character speed
 function whileDown() {
-  if ((aDown || dDown) == true) {
+  if ((aDown || dDown || eDown) == true) {
     if (aDown == true && player.x > 0) {
       player.x -= 0.5;
     }
     if (dDown == true && player.x < width - player.sprite.width) {
       player.x += 1;
     }
-  }
 }
 
 setInterval(whileDown, 1);
@@ -119,7 +127,7 @@ setInterval(whileDown, 1);
 document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);
 
-/*
+
 // all gravity and speed, i think this is good
 function component(width, height, color, x, y, type) {
     this.type = type;
@@ -154,4 +162,3 @@ this.newPos = function() {
       this.y = rockbottom;
     }
   }
-*/

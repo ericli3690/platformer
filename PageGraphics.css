@@ -1,16 +1,11 @@
 html {
   font-family: sans-serif;
-  /*background image*/
+  background-image: url("./images/dream_background.png");
   background-image: url("./images/brain_background.png");
-}
-
+  background-repeat: no-repeat;
+  background-size: 1368px 920px;
+  overflow: hidden; /*removing scroll bars*/
 body {
-  margin: 0px;
-}
-
-#game {
-  /*border: 3px solid grey;*/
-  margin: 0px;
-  overflow: hidden; /* removing scroll bars*/
-  display: block; /*preventing things outside the canvas i think*/
+   margin: 0px;
+ }
 }
