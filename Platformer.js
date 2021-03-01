@@ -29,9 +29,6 @@ class Player {
   newPos() {
 
   }
-  draw(target, first) {
-    loadImage(this.sprite, this.x, this.y, target.ctx, first);
-  }
 }
 
 class Canvas {
@@ -50,11 +47,19 @@ class Canvas {
   clear() {
     this.ctx.clearRect(0, 0, width, height);
   }
+  drawImg(img, x, y, first) {
+    loadImage(img, x, y, this.ctx, first)
+  }
   update() {
     this.clear();
     player.newPos();
     player.draw(this.identity, false);
   }
+}
+
+function updateCanvas(target, action) {
+  target.clear();
+
 }
 
 //first time drawing the character
@@ -80,9 +85,14 @@ function startGame() {
 //keydown variables
 var aDown = false;
 var dDown = false;
-var background = 0;
-var backgrounds = ['./images/brain_background.png', './images/dream_background.png'];
-//////////document.body.style.backgroundImage = 'url(' + backgrounds[background] + ');';
+var background = 2;
+var backgrounds = ['./images/title_screen.png', './images/instructions_screen.png', './images/brain_background.png', './images/dream_background.png'];
+function backgroundSet() {
+  document.body.style.backgroundImage = "url(" + backgrounds[background].toString() + ")";
+  document.body.style.backgroundSize = '1368px 920px';
+}
+
+backgroundSet();
 
 //keydown
 function keyDown(event) {
@@ -96,12 +106,16 @@ function keyDown(event) {
   }
   if (event.keyCode == 69) {
     //e, toggle background
-    if (background == 0) {
-      background = 1;
-    } else {
-      background = 0;
+    if (background == 2) {
+      background = 3;
+    } else if (background == 3) {
+      background = 2;
     }
-    ////////document.body.style.backgroundImage = 'url(' + backgrounds[background] + ');';
+    backgroundSet();
+  }
+  if (background == 0 || background == 1) {
+    background += 1;
+    backgroundSet();
   }
 }
 
