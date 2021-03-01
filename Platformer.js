@@ -22,12 +22,27 @@ class Player {
     this.x = x;
     this.y = y;
     this.sprite = characterImages[sprite];
+    this.speedX = 0;
+    this.speedY = 0;
+    this.gravity = 0.05;
+    this.gravitySpeed = 0;
+    this.height = 112;
+    this.width = 75;
   }
   get pos() {
     return this.x + ' ' + this.y;
   }
   newPos() {
-
+    this.gravitySpeed += this.gravity;
+    this.x += this.speedX;
+    this.y += this.speedY + this.gravitySpeed;
+    this.hitBottom();
+  }
+  hitBottom() {
+    var rockBottom = height - player.height;
+    if (this.y > rockBottom) {
+      this.y = rockBottom;
+    }
   }
 }
 
@@ -35,11 +50,13 @@ class Canvas {
   constructor(identity) {
     this.identity = identity;
   }
-  ready() {
+  set() {
     this.ctx = this.identity.getContext('2d');
     this.identity.width = width;
     this.identity.height = height;
-    this.interval = setInterval(this.update(), 20);
+  }
+  start() {
+    this.interval = setInterval(updatePlayer, 20);
   }
   stop() {
     clearInterval(this.interval);
@@ -50,16 +67,12 @@ class Canvas {
   drawImg(img, x, y, first) {
     loadImage(img, x, y, this.ctx, first)
   }
-  update() {
-    this.clear();
-    player.newPos();
-    player.draw(this.identity, false);
-  }
 }
 
-function updateCanvas(target, action) {
-  target.clear();
-
+function updatePlayer() {
+  playerCanvas.clear();
+  player.newPos();
+  playerCanvas.drawImg(player.sprite, player.x, player.y, false);
 }
 
 //first time drawing the character
@@ -75,12 +88,13 @@ function startGame() {
   backgroundCanvas = new Canvas(document.getElementById('background'));
   foregroundCanvas = new Canvas(document.getElementById('foreground'));
   //player canvas
-  player = new Player(characterStartingX, characterStartingY, characterImages[0]);
-  playerCanvas.ready();
-  player.draw(playerCanvas, true);
+  player = new Player(characterStartingX, characterStartingY, 0);
+  playerCanvas.set();
+  playerCanvas.drawImg(player.sprite, player.x, player.y, true);
+  playerCanvas.start();
 }
 
-//startGame();
+startGame();
 
 //keydown variables
 var aDown = false;
@@ -134,9 +148,9 @@ function keyUp(event) {
 function whileDown() {
   if ((aDown || dDown) == true) {
     if (aDown == true && player.x > 0) {
-      player.x -= 0.5;
+      player.x -= 1;
     }
-    if (dDown == true && player.x < width - player.sprite.width) {
+    if (dDown == true && player.x < width - player.width) {
       player.x += 1;
     }
   }
@@ -146,41 +160,3 @@ setInterval(whileDown, 1);
 
 document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);
-
-
-// all gravity and speed, i think this is good
-/*
-function component(width, height, color, x, y, type) {
-    this.type = type;
-    this.width = width;
-    this.height = height;
-    this.x = x;
-    this.y = y;
-    this.speedX = 0;
-    this.speedY = 0;
-    this.gravity = 0.05;
-    this.gravitySpeed = 0;
-    this.update = function() {
-        ctx = myGameArea.context;
-        ctx.fillStyle = color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-    }
-    this.newPos = function() {
-        this.gravitySpeed += this.gravity;
-        this.x += this.speedX;
-        this.y += this.speedY + this.gravitySpeed;
-    }
-}
-this.newPos = function() {
-    this.gravitySpeed += this.gravity;
-    this.x += this.speedX;
-    this.y += this.speedY + this.gravitySpeed;
-    this.hitBottom();
-  }
-  this.hitBottom = function() {
-    var rockbottom = myGameArea.canvas.height - this.height;
-    if (this.y > rockbottom) {
-      this.y = rockbottom;
-    }
-  }
-*/
