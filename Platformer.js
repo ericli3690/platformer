@@ -118,6 +118,10 @@ function keyDown(event) {
     //d
     dDown = true;
   }
+  if (event.keyCode == 32){
+    //space
+    spaceDown = true;
+  }
   if (event.keyCode == 69) {
     //e, toggle background
     if (background == 2) {
@@ -142,19 +146,26 @@ function keyUp(event) {
     //d
     dDown = false;
   }
+  if (event.keyCode == 32){
+  //space
+  spaceDown = false;
+ }
 }
-
-//character speed
+//character speed and jump
 function whileDown() {
-  if ((aDown || dDown) == true) {
+  if ((aDown || dDown || spaceDown) == true) {
     if (aDown == true && player.x > 0) {
       player.x -= 1;
     }
     if (dDown == true && player.x < width - player.width) {
       player.x += 1;
     }
+    if (spaceDown == true && player.y < height - player.height){
+      player.y -=3;
+    }
   }
 }
+
 
 setInterval(whileDown, 1);
 
