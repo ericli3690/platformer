@@ -24,7 +24,7 @@ class Player {
     this.sprite = characterImages[sprite];
     this.speedX = 0;
     this.speedY = 0;
-    this.gravity = 0.05;
+    this.gravity = 0.5;
     this.gravitySpeed = 0;
     this.height = 112;
     this.width = 75;
@@ -39,16 +39,22 @@ class Player {
     this.hitBottom();
   }
   hitBottom() {
-    var rockBottom = height - player.height;
+    var rockBottom = height - player.height - playerCanvas.bottom;
     if (this.y > rockBottom) {
       this.y = rockBottom;
+      this.gravitySpeed = 0;
+      jumpCooldown = false;
     }
+  }
+  accelerate(n) {
+    player.gravity = n;
   }
 }
 
 class Canvas {
-  constructor(identity) {
+  constructor(identity, bottom) {
     this.identity = identity;
+    this.bottom = bottom;
   }
   set() {
     this.ctx = this.identity.getContext('2d');
@@ -84,9 +90,9 @@ var playerCanvas;
 
 //canvases
 function startGame() {
-  playerCanvas = new Canvas(document.getElementById('player'));
-  backgroundCanvas = new Canvas(document.getElementById('background'));
-  foregroundCanvas = new Canvas(document.getElementById('foreground'));
+  playerCanvas = new Canvas(document.getElementById('player'), 270);
+  backgroundCanvas = new Canvas(document.getElementById('background'), 0);
+  foregroundCanvas = new Canvas(document.getElementById('foreground'), 0);
   //player canvas
   player = new Player(characterStartingX, characterStartingY, 0);
   playerCanvas.set();
@@ -99,6 +105,7 @@ startGame();
 //keydown variables
 var aDown = false;
 var dDown = false;
+var spaceDown = false;
 var background = 2;
 var backgrounds = ['./images/title_screen.png', './images/instructions_screen.png', './images/brain_background.png', './images/dream_background.png'];
 function backgroundSet() {
@@ -107,6 +114,8 @@ function backgroundSet() {
 }
 
 backgroundSet();
+
+var jumpCooldown = false;;
 
 //keydown
 function keyDown(event) {
@@ -118,9 +127,12 @@ function keyDown(event) {
     //d
     dDown = true;
   }
-  if (event.keyCode == 32){
+  if (event.keyCode == 32) {
     //space
     spaceDown = true;
+    if (jumpCooldown == false) {
+      player.accelerate(-1);
+    }
   }
   if (event.keyCode == 69) {
     //e, toggle background
@@ -149,9 +161,14 @@ function keyUp(event) {
   if (event.keyCode == 32){
   //space
   spaceDown = false;
+  player.gravity = 1;
+  timeSinceJump = 0;
+  jumpCooldown = true;
  }
 }
 //character speed and jump
+var timeSinceJump = 0;
+
 function whileDown() {
   if ((aDown || dDown || spaceDown) == true) {
     if (aDown == true && player.x > 0) {
@@ -160,12 +177,16 @@ function whileDown() {
     if (dDown == true && player.x < width - player.width) {
       player.x += 1;
     }
-    if (spaceDown == true && player.y < height - player.height){
-      player.y -=3;
+    if (spaceDown == true) {
+      timeSinceJump += 1;
+      if (timeSinceJump == 60) {
+        player.gravity = 1;
+        timeSinceJump = 0;
+        jumpCooldown = true;
+      }
     }
   }
 }
-
 
 setInterval(whileDown, 1);
 
