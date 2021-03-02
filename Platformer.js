@@ -106,7 +106,7 @@ startGame();
 var aDown = false;
 var dDown = false;
 var spaceDown = false;
-var background = 2;
+var background = 0;
 var backgrounds = ['./images/title_screen.png', './images/instructions_screen.png', './images/brain_background.png', './images/dream_background.png'];
 function backgroundSet() {
   document.body.style.backgroundImage = "url(" + backgrounds[background].toString() + ")";
