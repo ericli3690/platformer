@@ -44,6 +44,7 @@ class Player {
       this.y = rockBottom;
       this.gravitySpeed = 0;
       jumpCooldown = false;
+      console.log('smack')
     }
   }
   accelerate(n) {
@@ -133,6 +134,7 @@ function keyDown(event) {
     if (jumpCooldown == false) {
       player.accelerate(-1);
     }
+    console.log('jump')
   }
   if (event.keyCode == 69) {
     //e, toggle background
@@ -143,9 +145,11 @@ function keyDown(event) {
     }
     backgroundSet();
   }
-  if (background == 0 || background == 1) {
-    background += 1;
-    backgroundSet();
+  if (event.keyCode == 27) {
+    if (background == 1 || background == 2) {
+      background += 1;
+      backgroundSet();
+    }
   }
 }
 
@@ -164,6 +168,7 @@ function keyUp(event) {
   player.gravity = 1;
   timeSinceJump = 0;
   jumpCooldown = true;
+  console.log('spaceoff')
  }
 }
 //character speed and jump
@@ -179,16 +184,17 @@ function whileDown() {
     }
     if (spaceDown == true) {
       timeSinceJump += 1;
-      if (timeSinceJump == 60) {
+      if (timeSinceJump == 50) {
         player.gravity = 1;
         timeSinceJump = 0;
         jumpCooldown = true;
+        console.log('timeup');
       }
     }
   }
 }
 
-setInterval(whileDown, 1);
+setInterval(whileDown, 10);
 
 document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);
