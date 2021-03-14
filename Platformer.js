@@ -1,9 +1,5 @@
 console.log('JS Linked');
 
-//making the game fit the window
-var width = window.innerWidth;
-var height = window.innerHeight;
-
 //when loading images
 function loadImage(mySrc, x, y, ctxi, firstTimeLoading) {
   var imageToDraw = new Image();
@@ -22,10 +18,9 @@ class Player {
     this.x = x;
     this.y = y;
     this.sprite = characterImages[sprite];
-    this.speedX = 0;
-    this.speedY = 0;
-    this.gravity = 0.5;
-    this.gravitySpeed = 0;
+    this.velocityX = 0;
+    this.velocityY = 0;
+    this.gravity = -0.5;
     this.height = 112;
     this.width = 75;
   }
@@ -33,22 +28,18 @@ class Player {
     return this.x + ' ' + this.y;
   }
   newPos() {
-    this.gravitySpeed += this.gravity;
-    this.x += this.speedX;
-    this.y += this.speedY + this.gravitySpeed;
+    this.velocityY += this.gravity;
+    this.x += this.velocityX;
+    this.y -= this.velocityY;
     this.hitBottom();
   }
   hitBottom() {
-    var rockBottom = height - player.height - playerCanvas.bottom;
+    //var rockBottom = window.innerHeight - player.height - playerCanvas.bottom;
+    var rockBottom = window.innerHeight - player.height;
     if (this.y > rockBottom) {
       this.y = rockBottom;
-      this.gravitySpeed = 0;
-      jumpCooldown = false;
-      console.log('smack')
+      this.velocityY = 0;
     }
-  }
-  accelerate(n) {
-    player.gravity = n;
   }
 }
 
@@ -59,8 +50,8 @@ class Canvas {
   }
   set() {
     this.ctx = this.identity.getContext('2d');
-    this.identity.width = width;
-    this.identity.height = height;
+    this.identity.width = window.innerWidth;
+    this.identity.height = window.innerHeight;
   }
   start() {
     this.interval = setInterval(updatePlayer, 20);
@@ -69,7 +60,7 @@ class Canvas {
     clearInterval(this.interval);
   }
   clear() {
-    this.ctx.clearRect(0, 0, width, height);
+    this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
   }
   drawImg(img, x, y, first) {
     loadImage(img, x, y, this.ctx, first)
@@ -111,12 +102,16 @@ var background = 0;
 var backgrounds = ['./images/title_screen.png', './images/instructions_screen.png', './images/brain_background.png', './images/dream_background.png'];
 function backgroundSet() {
   document.body.style.backgroundImage = "url(" + backgrounds[background].toString() + ")";
-  document.body.style.backgroundSize = '1368px 920px';
+  document.body.style.backgroundSize = '1368px 912px';
+}
+var waitUntilBrowserUpdates;
+function canvasSet() {
+  document.getElementById('player').width = window.innerWidth;
+  document.getElementById('player').height = window.innerHeight;
+  clearInterval(waitUntilBrowserUpdates);
 }
 
 backgroundSet();
-
-var jumpCooldown = false;;
 
 //keydown
 function keyDown(event) {
@@ -131,10 +126,6 @@ function keyDown(event) {
   if (event.keyCode == 32) {
     //space
     spaceDown = true;
-    if (jumpCooldown == false) {
-      player.accelerate(-1);
-    }
-    console.log('jump')
   }
   if (event.keyCode == 69) {
     //e, toggle background
@@ -146,55 +137,53 @@ function keyDown(event) {
     backgroundSet();
   }
   if (event.keyCode == 27) {
+    //esc
     if (background == 1 || background == 2) {
       background += 1;
       backgroundSet();
     }
   }
+  if (event.keyCode == 122) {
+    //f11
+    if (background == 0) {
+     background += 1;
+     backgroundSet();
+     waitUntilBrowserUpdates = setInterval(canvasSet, 250);
+    }
+  }
 }
+
 
 function keyUp(event) {
   if (event.keyCode == 65) {
     //a
     aDown = false;
+    player.velocityX = 0;
   }
   if (event.keyCode == 68) {
     //d
     dDown = false;
+    player.velocityX = 0;
   }
   if (event.keyCode == 32){
-  //space
-  spaceDown = false;
-  player.gravity = 1;
-  timeSinceJump = 0;
-  jumpCooldown = true;
-  console.log('spaceoff')
+    //space
+    spaceDown = false;
  }
 }
 //character speed and jump
-var timeSinceJump = 0;
-
 function whileDown() {
-  if ((aDown || dDown || spaceDown) == true) {
-    if (aDown == true && player.x > 0) {
-      player.x -= 1;
-    }
-    if (dDown == true && player.x < width - player.width) {
-      player.x += 1;
-    }
-    if (spaceDown == true) {
-      timeSinceJump += 1;
-      if (timeSinceJump == 50) {
-        player.gravity = 1;
-        timeSinceJump = 0;
-        jumpCooldown = true;
-        console.log('timeup');
-      }
-    }
+  if (aDown == true && player.x > 0) {
+    player.velocityX -= 1;
+  }
+  if (dDown == true && player.x < window.innerWidth - player.width) {
+    player.velocityX += 1;
+  }
+  if (spaceDown == true) {
+
   }
 }
 
-setInterval(whileDown, 10);
+setInterval(whileDown, 16);
 
 document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);

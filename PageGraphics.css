@@ -1,8 +1,8 @@
 html {
   font-family: sans-serif;
-  background-image: url("./images/brain_background.png");
+  background-image: url("./images/title_screen.png");
   background-repeat: no-repeat;
-  background-size: 1368px 920px;
+  background-size: 1368px 912px;
   overflow: hidden; /*removing scroll bars*/
 }
 
