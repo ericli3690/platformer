@@ -102,7 +102,7 @@ var background = 0;
 var backgrounds = ['./images/title_screen.png', './images/instructions_screen.png', './images/brain_background.png', './images/dream_background.png'];
 function backgroundSet() {
   document.body.style.backgroundImage = "url(" + backgrounds[background].toString() + ")";
-  document.body.style.backgroundSize = '1368px 912px';
+  document.body.style.backgroundSize = window.innerWidth + ' ' + window.innerHeight;
 }
 var waitUntilBrowserUpdates;
 function canvasSet() {
@@ -148,8 +148,8 @@ function keyDown(event) {
     if (background == 0) {
      background += 1;
      backgroundSet();
-     waitUntilBrowserUpdates = setInterval(canvasSet, 250);
     }
+    waitUntilBrowserUpdates = setInterval(canvasSet, 250);
   }
 }
 
