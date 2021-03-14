@@ -150,10 +150,10 @@ function keyDown(event) {
   }
   if (event.keyCode == 69) {
     //e, toggle background
-    if (background == 2) {
+    if (background == 3) {
+      background = 4;
+    } else if (background == 4) {
       background = 3;
-    } else if (background == 3) {
-      background = 2;
     }
     backgroundSet();
   }
