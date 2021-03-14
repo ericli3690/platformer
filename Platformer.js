@@ -23,6 +23,9 @@ class Player {
     this.gravity = -0.5;
     this.height = 112;
     this.width = 75;
+    this.speedLimit = 10;
+    this.jumpHeight = 15;
+    this.graceJump = 30;
   }
   get pos() {
     return this.x + ' ' + this.y;
@@ -31,14 +34,27 @@ class Player {
     this.velocityY += this.gravity;
     this.x += this.velocityX;
     this.y -= this.velocityY;
-    this.hitBottom();
+    this.sideCollisions();
   }
-  hitBottom() {
-    //var rockBottom = window.innerHeight - player.height - playerCanvas.bottom;
-    var rockBottom = window.innerHeight - player.height;
-    if (this.y > rockBottom) {
-      this.y = rockBottom;
+  sideCollisions() {
+    if (this.x > (window.innerWidth - player.width)) {
+      //contacting right side
+      this.x = window.innerWidth - player.width;
+      this.velocityX = 0;
+    } else if (this.x < 0) {
+      //contacting left side
+      this.x = 0;
+      this.velocityX = 0;
+    }
+    if (this.y > window.innerHeight - player.height) {
+      //contacting bottom
+      //var rockBottom = window.innerHeight - player.height - playerCanvas.bottom;
+      this.y = window.innerHeight - player.height;
       this.velocityY = 0;
+    } else if (this.y > 0) {
+      //contacting top
+      //this.y = 0;
+      //this.velocityY = 0;
     }
   }
 }
@@ -108,6 +124,7 @@ var waitUntilBrowserUpdates;
 function canvasSet() {
   document.getElementById('player').width = window.innerWidth;
   document.getElementById('player').height = window.innerHeight;
+  document.body.style.backgroundSize = window.innerWidth.toString() + 'px ' + window.innerHeight.toString() + 'px';
   clearInterval(waitUntilBrowserUpdates);
 }
 
@@ -126,6 +143,10 @@ function keyDown(event) {
   if (event.keyCode == 32) {
     //space
     spaceDown = true;
+    //ONLY WORKS WHEN THE GROUND IS THE BOTTOM OF THE PAGE
+    if (player.y > window.innerHeight - player.height - player.graceJump) {
+      player.velocityY = player.jumpHeight;
+    }
   }
   if (event.keyCode == 69) {
     //e, toggle background
@@ -165,21 +186,21 @@ function keyUp(event) {
     dDown = false;
     player.velocityX = 0;
   }
-  if (event.keyCode == 32){
+  if (event.keyCode == 32) {
     //space
     spaceDown = false;
- }
+  }
 }
 //character speed and jump
 function whileDown() {
-  if (aDown == true && player.x > 0) {
+  if (aDown == true && player.x > 0 && player.velocityX > -player.speedLimit) {
     player.velocityX -= 1;
   }
-  if (dDown == true && player.x < window.innerWidth - player.width) {
+  if (dDown == true && player.x < window.innerWidth - player.width && player.velocityX < player.speedLimit) {
     player.velocityX += 1;
   }
   if (spaceDown == true) {
-
+    //Y DOES NOT HAVE A SPEED CAP
   }
 }
 
