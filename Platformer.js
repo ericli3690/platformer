@@ -99,7 +99,7 @@ var aDown = false;
 var dDown = false;
 var spaceDown = false;
 var background = 0;
-var backgrounds = ['./images/title_screen.png', './images/instructions_screen.png', './images/brain_background.png', './images/dream_background.png'];
+var backgrounds = ['./images/F11_background.png', './images/title_screen.png', './images/instructions_screen.png', './images/brain_background.png', './images/dream_background.png'];
 function backgroundSet() {
   document.body.style.backgroundImage = "url(" + backgrounds[background].toString() + ")";
   document.body.style.backgroundSize = window.innerWidth + ' ' + window.innerHeight;
