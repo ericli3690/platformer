@@ -35,7 +35,7 @@ class Player {
     this.velocityX = 0;
     this.velocityY = 0;
     this.gravity = -0.5;
-    this.height = 112;
+    this.height = 150;
     this.width = 75;
     this.speedLimit = 10;
     this.jumpHeight = 15;
