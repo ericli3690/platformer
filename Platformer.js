@@ -1,5 +1,19 @@
 console.log('JS Linked');
 
+//// TODO:
+/*
+
+the background moves, not the player
+how big is the character
+
+design the level designer (lol)
+collision logic
+
+sprites and switching between sprite states
+friction?
+
+*/
+
 //when loading images
 function loadImage(mySrc, x, y, ctxi, firstTimeLoading) {
   var imageToDraw = new Image();
@@ -25,10 +39,38 @@ class Player {
     this.width = 75;
     this.speedLimit = 10;
     this.jumpHeight = 15;
-    this.graceJump = 30;
+    this.graceJump = 10;
+    this.horizontalMomentum = 0.75; //the larger, the faster it slows down
+    this.minimumJumpHeight = 5; //higher values practically remove small jumps
   }
   get pos() {
     return this.x + ' ' + this.y;
+  }
+  calculateVelocity() {
+    //player speed and jump, edit before updating the position
+    if (aDown == true && this.x > 0 && this.velocityX > -this.speedLimit) {
+      this.velocityX -= 1;
+    }
+    if (dDown == true && this.x < window.innerWidth - this.width && this.velocityX < this.speedLimit) {
+      this.velocityX += 1;
+    }
+    if (horizontalMovementSlowing == true) {
+      //the player has terminated movement in a direction
+      if ((this.velocityX < this.horizontalMomentum) && (this.velocityX > -this.horizontalMomentum)) {
+        //the player's drifing has been slowed enough to the point where it will be zero next tick
+        this.velocityX = 0;
+        horizontalMovementSlowing = false;
+      } else if (this.velocityX > 0) {
+        //the player was originally moving to the right, and must continue drifting for an interval of time
+        this.velocityX -= this.horizontalMomentum;
+      } else if (this.velocityX < 0) {
+        //the player was originally moving to the left, and must continue drifting for an interval of time
+        this.velocityX += this.horizontalMomentum;
+      }
+    }
+    if (canJump = false) {
+      //Y DOES NOT HAVE A SPEED CAP
+    }
   }
   newPos() {
     this.velocityY += this.gravity;
@@ -51,6 +93,7 @@ class Player {
       //var rockBottom = window.innerHeight - player.height - playerCanvas.bottom;
       this.y = window.innerHeight - player.height;
       this.velocityY = 0;
+      canJump = true;
     } else if (this.y > 0) {
       //contacting top
       //this.y = 0;
@@ -70,7 +113,7 @@ class Canvas {
     this.identity.height = window.innerHeight;
   }
   start() {
-    this.interval = setInterval(updatePlayer, 20);
+    this.interval = setInterval(updatePlayer, 16);
   }
   stop() {
     clearInterval(this.interval);
@@ -85,12 +128,13 @@ class Canvas {
 
 function updatePlayer() {
   playerCanvas.clear();
+  player.calculateVelocity();
   player.newPos();
   playerCanvas.drawImg(player.sprite, player.x, player.y, false);
 }
 
 //first time drawing the character
-var characterImages = ['./images/imagges.png'];
+var characterImages = ['./images/characterframex2.png'];
 var characterStartingX = 50;
 var characterStartingY = 235;
 var player;
@@ -113,7 +157,8 @@ startGame();
 //keydown variables
 var aDown = false;
 var dDown = false;
-var spaceDown = false;
+var canJump = true;
+var horizontalMovementSlowing = false;
 var background = 0;
 var backgrounds = ['./images/F11_background.png', './images/title_screen.png', './images/instructions_screen.png', './images/brain_background.png', './images/dream_background.png'];
 function backgroundSet() {
@@ -142,9 +187,9 @@ function keyDown(event) {
   }
   if (event.keyCode == 32) {
     //space
-    spaceDown = true;
+    canJump = false;
     //ONLY WORKS WHEN THE GROUND IS THE BOTTOM OF THE PAGE
-    if (player.y > window.innerHeight - player.height - player.graceJump) {
+    if (player.y >= window.innerHeight - player.height - player.graceJump) {
       player.velocityY = player.jumpHeight;
     }
   }
@@ -179,32 +224,22 @@ function keyUp(event) {
   if (event.keyCode == 65) {
     //a
     aDown = false;
-    player.velocityX = 0;
+    horizontalMovementSlowing = true;
+    //player.velocityX = 0;
   }
   if (event.keyCode == 68) {
     //d
     dDown = false;
-    player.velocityX = 0;
+    horizontalMovementSlowing = true;
+    //player.velocityX = 0;
   }
   if (event.keyCode == 32) {
     //space
-    spaceDown = false;
+    if (player.velocityY > player.minimumJumpHeight) {
+      player.velocityY = player.minimumJumpHeight;
+    }
   }
 }
-//character speed and jump
-function whileDown() {
-  if (aDown == true && player.x > 0 && player.velocityX > -player.speedLimit) {
-    player.velocityX -= 1;
-  }
-  if (dDown == true && player.x < window.innerWidth - player.width && player.velocityX < player.speedLimit) {
-    player.velocityX += 1;
-  }
-  if (spaceDown == true) {
-    //Y DOES NOT HAVE A SPEED CAP
-  }
-}
-
-setInterval(whileDown, 16);
 
 document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);
