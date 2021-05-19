@@ -39,7 +39,7 @@ class Player {
     this.width = 75;
     this.speedLimit = 10;
     this.jumpHeight = 15;
-    this.graceJump = 10;
+    this.graceJump = 12;
     this.horizontalMomentum = 0.75; //the larger, the faster it slows down
     this.minimumJumpHeight = 5; //higher values practically remove small jumps
   }
@@ -53,6 +53,15 @@ class Player {
     }
     if (dDown == true && this.x < window.innerWidth - this.width && this.velocityX < this.speedLimit) {
       this.velocityX += 1;
+    }
+    if (jumpKeyDown == true) {
+      //the jump key is currently down
+      if (canJump == true) {
+        //the player is close enough to the floor
+        //apply vertical velocity
+        player.velocityY = player.jumpHeight;
+        canJump = false;
+      }
     }
     if (horizontalMovementSlowing == true) {
       //the player has terminated movement in a direction
@@ -79,28 +88,34 @@ class Player {
     this.sideCollisions();
   }
   sideCollisions() {
-    if (this.x > (window.innerWidth - player.width)) {
+    if (this.x > (window.innerWidth - this.width)) {
       //contacting right side
-      this.x = window.innerWidth - player.width;
+      this.x = window.innerWidth - this.width;
       this.velocityX = 0;
     } else if (this.x < 0) {
       //contacting left side
       this.x = 0;
       this.velocityX = 0;
     }
-    if (this.y > window.innerHeight - player.height) {
+    //ONLY WORKS WHEN THE GROUND IS THE BOTTOM OF THE PAGE
+    if (this.y >= window.innerHeight - this.height) {
       //contacting bottom
       //var rockBottom = window.innerHeight - player.height - playerCanvas.bottom;
-      this.y = window.innerHeight - player.height;
+      this.y = window.innerHeight - this.height;
       this.velocityY = 0;
-      canJump = true;
     } else if (this.y > 0) {
       //contacting top
       //this.y = 0;
       //this.velocityY = 0;
     }
+    if (this.y >= window.innerHeight - this.height - this.graceJump) {
+      //if character is close enough to the bottom to warrant a jump
+      canJump = true;
+    }
   }
 }
+
+
 
 class Canvas {
   constructor(identity, bottom) {
@@ -158,6 +173,7 @@ startGame();
 var aDown = false;
 var dDown = false;
 var canJump = true;
+var jumpKeyDown = false;
 var horizontalMovementSlowing = false;
 var background = 0;
 var backgrounds = ['./images/F11_background.png', './images/title_screen.png', './images/instructions_screen.png', './images/brain_background.png', './images/dream_background.png'];
@@ -187,11 +203,7 @@ function keyDown(event) {
   }
   if (event.keyCode == 32) {
     //space
-    canJump = false;
-    //ONLY WORKS WHEN THE GROUND IS THE BOTTOM OF THE PAGE
-    if (player.y >= window.innerHeight - player.height - player.graceJump) {
-      player.velocityY = player.jumpHeight;
-    }
+    jumpKeyDown = true;
   }
   if (event.keyCode == 69) {
     //e, toggle background
@@ -235,6 +247,7 @@ function keyUp(event) {
   }
   if (event.keyCode == 32) {
     //space
+    jumpKeyDown = false;
     if (player.velocityY > player.minimumJumpHeight) {
       player.velocityY = player.minimumJumpHeight;
     }
