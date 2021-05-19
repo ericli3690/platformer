@@ -32,11 +32,12 @@ class Player {
     this.x = x;
     this.y = y;
     this.sprite = characterImages[sprite];
+    this.background = '';
     this.velocityX = 0;
     this.velocityY = 0;
     this.gravity = -0.5;
-    this.height = 150;
-    this.width = 75;
+    this.height = 120;
+    this.width = 48;
     this.speedLimit = 10;
     this.jumpHeight = 15;
     this.graceJump = 12;
@@ -150,8 +151,6 @@ function updatePlayer() {
 
 //first time drawing the character
 var characterImages = ['./images/characterframex2.png'];
-var characterStartingX = 50;
-var characterStartingY = 235;
 var player;
 var playerCanvas;
 
@@ -161,7 +160,9 @@ function startGame() {
   backgroundCanvas = new Canvas(document.getElementById('background'), 0);
   foregroundCanvas = new Canvas(document.getElementById('foreground'), 0);
   //player canvas
-  player = new Player(characterStartingX, characterStartingY, 0);
+  player = new Player(0, 0, 0);
+  player.x = window.innerWidth / 2 - player.width / 2;
+  player.y = window.innerHeight / 2 - player.height / 2;
   playerCanvas.set();
   playerCanvas.drawImg(player.sprite, player.x, player.y, true);
   playerCanvas.start();
