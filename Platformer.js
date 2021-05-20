@@ -150,7 +150,7 @@ function updatePlayer() {
 }
 
 //first time drawing the character
-var characterImages = ['./images/characterframex2.png'];
+var characterImages = ['./images/character.png'];
 var player;
 var playerCanvas;
 
