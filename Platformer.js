@@ -7,13 +7,7 @@ FOR KIANA:
 running, jumping cycles, more sprites
 
 IN THE DESIGNER:
-add orientation blocks, all blocks
-loading, right click
-edit the tooutput
-show names on hover
-erasing should save the current brush
-cleanup ui slightly
-reorganize image folders, import images
+copy paste, fill
 
 IN THIS PROJECT:
 drawing the proper blocks
@@ -163,7 +157,7 @@ function updatePlayer() {
 }
 
 //first time drawing the character
-var characterImages = ['./images/character.png'];
+var characterImages = ['./images/sprites/character.png'];
 var player;
 var playerCanvas;
 
@@ -190,7 +184,7 @@ var canJump = true;
 var jumpKeyDown = false;
 var horizontalMovementSlowing = false;
 var background = 0;
-var backgrounds = ['./images/F11_background.png', './images/title_screen.png', './images/instructions_screen.png', './images/brain_background.png', './images/dream_background.png'];
+var backgrounds = ['./images/backgrounds/F11_background.png', './images/backgrounds/title_screen.png', './images/backgrounds/instructions_screen.png', './images/backgrounds/brain_background.png', './images/backgrounds/dream_background.png'];
 function backgroundSet() {
   document.body.style.backgroundImage = "url(" + backgrounds[background].toString() + ")";
   document.body.style.backgroundSize = window.innerWidth.toString() + 'px ' + window.innerHeight.toString() + 'px';
