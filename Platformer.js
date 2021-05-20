@@ -3,14 +3,27 @@ console.log('JS Linked');
 //// TODO:
 /*
 
+FOR KIANA:
+running, jumping cycles, more sprites
+
+IN THE DESIGNER:
+add orientation blocks, all blocks
+loading, right click
+edit the tooutput
+show names on hover
+erasing should save the current brush
+cleanup ui slightly
+reorganize image folders, import images
+
+IN THIS PROJECT:
+drawing the proper blocks
 the background moves, not the player
-how big is the character
+colliding with blocks
 
-design the level designer (lol)
-collision logic
-
-sprites and switching between sprite states
-friction?
+MAYBE:
+friction
+add images instead of colours
+fanmade levels
 
 */
 
